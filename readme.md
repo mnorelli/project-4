@@ -50,23 +50,35 @@ Rails, to build structure around users and their trips, votes, comments.
 Angular mini-app in the front-end to handle search UI and voting
 Firebase for commenting
 
-#######Map
+######Map
 Google or MapBox, query locations in radius around a search term or a clicked point
 
-#######Search
-OuterSpatial API
+######Search
+OuterSpatial API data queried by MapBox map interactions
 
-#######Concatenation
-Link several trails together and treat as one
+######Concatenation
+Link several trails together and treat as one.  Simple object concatenation?
 
-######Trail display
+######Add to List
+Angular
+
+######Trail display  
 3D-like representation built in WebGL or MapBox tilt.  Show nearby amenities as icons from OuterSpatial.  Calculate 3D distance. Calculate travel time based on a metric that must already exist?  Calculate calories burned.  Build into a beautiful display.
 
-#######Generate elevation profile
+######Generate elevation profile
 Turn trail or concatenation of trails into an elevation profile.  Show using D3.
 
 ######Commenting
 Build a Firebase backend to allow real-time comments and voting.  Show on the trail page and the main page.
+
+######Users
+bcrypt and auth and flash messages and restrictions on various pages
+
+######Friendly URLs
+Clean URLs for sharing trips
+
+####MVP
+Map with search putting results on a list.
 
 
 
@@ -116,7 +128,8 @@ only partially completed
 - overlay the trail profiles on each other, which would need to...
 - recalculate the trail profiles based on a consistent y-axis among listed trails to enable an "apples-to-apples" comparison
 - use WebGL, Three.js, or A-Frame to provide a 3D-like experience of the trail data
-- link to OuterSpatil for data updating
-- export to PDF Maps and bring back photos into the app
+- link to OuterSpatial for data updating
+- export trips to PDF Maps
+- add photos taken with PDF Maps back into the app
 
 
