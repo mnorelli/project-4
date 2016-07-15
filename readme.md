@@ -44,6 +44,8 @@ Demonstrate a user interaction between a map, a profile, and Google Street View.
 Needs: a map with a route, an elevation profile of that route, and Street Views at places along the route.
 Should give a longitude/latitude that will change with user interaction at any of the three views whcih in turn change each of the other views
 
+Don't forget to add referrer restrictions to Google SV Console so others can't use my streetview API
+
 Then...
 ######Basic app
 Rails, to build structure around users and their trips, votes, comments.
