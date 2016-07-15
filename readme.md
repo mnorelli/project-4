@@ -122,6 +122,7 @@ only partially completed
 - Custom angular directive for parsing JSON
 - Ruby on Rails
 - Firebase to allow three-way data binding
+   - or use  ActionCable  instead?
 - embedded MapBox or OuterSpatial map
 - OuterSpatial API
 - more...
