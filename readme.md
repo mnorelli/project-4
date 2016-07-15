@@ -86,7 +86,10 @@ Map with search putting results on a list.
 
 <details><summary>Wireframes</summary>
 ![wireframe](https://ucarecdn.com/8ebec341-bc84-4563-9fcb-a99672b3334b/Wireframe.png =200x) 
-![wireframe modal](https://ucarecdn.com/f0058f43-66fc-44fc-94e4-16b5de665a2a/WireframeModal.png =200x)</details>
+![show](https://ucarecdn.com/5c2052c8-5e8b-4f07-ab06-e39f3f3578e8/ShowPage.jpg =200x)
+![signup](https://ucarecdn.com/c20252cd-8dc1-45f7-a17b-511f2771a13c/SignUp.jpg =200x)
+![profile](https://ucarecdn.com/a2e849fa-0965-4424-a5a4-71c57d8382fd/Profile.jpg =200x)
+</details>
 
 ##Install
 
