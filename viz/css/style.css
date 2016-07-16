@@ -21,6 +21,7 @@ body {
 
 .header {
   background: tomato;
+  position:relative;
 }
 
 .footer {
@@ -30,6 +31,9 @@ body {
 #map {
   text-align: left;
   background: deepskyblue;
+  /*position:absolute;  */
+  padding: 0px;
+  /*width:100%;*/
 }
 
 .aside-1 {

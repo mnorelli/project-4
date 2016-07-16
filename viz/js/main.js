@@ -1,7 +1,7 @@
 console.log("Linked.");
 window.onload = function(){
 
-  // mapDraw();
+  mapDraw();
 
 }
 
