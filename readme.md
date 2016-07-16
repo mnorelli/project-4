@@ -47,6 +47,10 @@ Should give a longitude/latitude that will change with user interaction at any o
 Don't forget to add referrer restrictions to Google SV Console so others can't use my streetview API
 
 Then...
+######More Planning
+- add ERD for Rails 
+- think through remianing tasks and slim down scope where needed
+
 ######Basic app
 Rails, to build structure around users and their trips, votes, comments.
 Angular mini-app in the front-end to handle search UI and voting
