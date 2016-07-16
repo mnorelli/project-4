@@ -46,6 +46,8 @@ Should give a longitude/latitude that will change with user interaction at any o
 
 Don't forget to add referrer restrictions to Google SV Console so others can't use my streetview API
 
+To allow Maps and Street View, these uses must be enabled on my API key at the [Google dev console for project name: TrailLike](https://console.developers.google.com/apis/api/maps_backend/overview?project=traillike-5b077)
+
 Then...
 ######More Planning
 - add ERD for Rails 
