@@ -18,10 +18,6 @@ window.onload = function(){
     new_point = switch_coords(panorama.getPosition());  
     mapObj.point.features[0].geometry.coordinates = new_point;
 
-    //debug
-    window.map = Map;
-    console.log(window.map)
-
     // Update the source layer
     mapObj.map.getSource('point').setData(mapObj.point);
   });
@@ -32,7 +28,8 @@ window.onload = function(){
 mapObj = {};
 // starting location in Marin County, MapBox order = lonlat, Google order = latlon
 var start_loc_mapbox = [-122.5554883, 37.8664909];
-var start_loc_google = {lat:start_loc_mapbox[1], lng:start_loc_mapbox[0]};
+// var start_loc_google = {lat:start_loc_mapbox[1], lng:start_loc_mapbox[0]};
+var start_loc_google = switch_coords(start_loc_mapbox);
 
 
 function initPano() {
@@ -50,9 +47,6 @@ function initPano() {
       panControl: false,
       enableCloseButton: false
     });
-
-  // debug
-  window.panorama = panorama;
 }
 
 // MapBox map
@@ -87,11 +81,12 @@ function mapDraw(){
   });
 }
 
+// coonverts between MapBox coordinate array and Google object
 function switch_coords(coords){
   if (Array.isArray(coords)) {
-    return [coords[1],coords[0]]
+    return {lat:coords[1],lng:coords[0]}  // Google object
   } else {
-    return [coords.lng(),coords.lat()]
+    return [coords.lng(),coords.lat()]  // MapBox array
   }
 }
 
