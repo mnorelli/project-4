@@ -42,7 +42,8 @@ body {
 
 .aside-2 {
   background: hotpink;
-  width: 10%;
+  width: 100px;
+  height:400px;
   padding: 0;
 }
 

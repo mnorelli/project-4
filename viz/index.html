@@ -15,9 +15,7 @@
       <header class="header">Header</header>
       <article id="map"></article>
       <aside class="aside aside-1">Aside 1</aside>
-      <aside class="aside aside-2">
-        <iframe width="300" height="400" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/streetview?location=37.8500%2C-122.5259&key=AIzaSyBfjgQ19HPt_ArtptOO6c7ZgTC4xmGHIm8" allowfullscreen></iframe>
-      </aside>
+      <aside class="aside aside-2" id="pano"></aside>
       <footer class="footer">Footer</footer>
     </div>
 
@@ -26,6 +24,11 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css' type='text/css' />
+
+    <!-- Google Maps API -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfjgQ19HPt_ArtptOO6c7ZgTC4xmGHIm8&callback=initPano">
+    </script>
 
 </body>
 </html>
