@@ -1,18 +1,9 @@
 window.onload = function(){
 
-  // make map object
-  mapboxgl.accessToken = 'pk.eyJ1IjoibW5vcmVsbGkiLCJhIjoiU3BCcTNJQSJ9.4EsgnQLWdR10NXrt7aBYGw';
-  mapObj.map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/outdoors-v9',
-      center: start_loc_mapbox, // starting position
-    zoom: 17 // starting zoom
-  });
-
-  // call MapBox map
+  // add map
   mapDraw();  
 
-  // listener on Google Street View
+  // listener on Google Street View, needs to be added after the rest of the JS loads since it calls mapObj
   panoObj.panorama.addListener('pano_changed', function() {
     // Move the map pointer to the new pano coords 
     new_point = [panoObj.panorama.getPosition().lng(),panoObj.panorama.getPosition().lat()];
@@ -21,16 +12,15 @@ window.onload = function(){
 
 }  // end of window.onload
 
+// starting location in Marin County, MapBox order = lnglat, Google order = latlng
+var start_loc_mapbox = [-122.5554883, 37.8664909];
+var start_loc_google = switch_coords(start_loc_mapbox,"object");
+
 // make maps into objects so access to them won't be limited by scope
 var mapObj = {};
 var panoObj = {};
 
-// starting location in Marin County, MapBox order = lnglat, Google order = latlng
-var start_loc_mapbox = [-122.5554883, 37.8664909];
-// var start_loc_google = {lat:start_loc_mapbox[1], lng:start_loc_mapbox[0]};
-var start_loc_google = switch_coords(start_loc_mapbox,"object");
-
-// Street View pano
+// Street View pano, fires from script call in index
 function initPano() {
   panoObj.panorama = new google.maps.StreetViewPanorama(
     document.getElementById('pano'), {
@@ -48,8 +38,17 @@ function initPano() {
     });
 }
 
-// MapBox map
+// MapBox map, geocoder control, point
 function mapDraw(){
+  // make map object
+  mapboxgl.accessToken = 'pk.eyJ1IjoibW5vcmVsbGkiLCJhIjoiU3BCcTNJQSJ9.4EsgnQLWdR10NXrt7aBYGw';
+  mapObj.map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/outdoors-v9',
+      center: start_loc_mapbox, // starting position
+    zoom: 17 // starting zoom
+  });
+
   // add geocoder search box
   mapObj.map.addControl(new mapboxgl.Geocoder());
 
@@ -63,7 +62,7 @@ function mapDraw(){
 
   // wait for map load to add point (prevents "Style is not yet loaded" error)
   mapObj.map.on('load', function () {
-  // with point at center of default map
+    // with point at center of default map
     mapObj.map.addSource('point', {
         "type": "geojson",
         "data": mapObj.point
@@ -80,23 +79,20 @@ function mapDraw(){
   });
 
   mapObj.movePoint = function(coords){
-    // change the point data
+    // change the point data and update the source layer to read in the new point
     mapObj.point.features[0].geometry.coordinates = coords;
-    // Update the source layer to reaad in the new point
     mapObj.map.getSource('point').setData(mapObj.point);
   }
 
-  // Look for a nearby Street View panorama when the map is clicked.
+  // Using Street View Service, look for a nearby Street View panorama when the map is clicked.
   // getPanoramaByLocation will return the nearest pano when the
   // given radius is 50 meters or less.
   mapObj.map.on('click', function(event) {
-    // Street View service
     var sv = new google.maps.StreetViewService();
     sv.getPanorama({location: switch_coords(event.lngLat,"object"), radius: 50}, processSVData);
   });
 
-
-}
+}  // end of mapDraw   ********************************************
 
 // returns Street View pano
 function processSVData(data, status) {
@@ -113,7 +109,7 @@ function processSVData(data, status) {
   }
 }
 
-// coonverts between MapBox and Google coordinates
+// converts between MapBox and Google coordinates
 // if type is not passed in as "array", it will output an object
 // assumes negative values are longitude
 function switch_coords(coords,type){
