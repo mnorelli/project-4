@@ -4,39 +4,38 @@ window.onload = function(){
   mapboxgl.accessToken = 'pk.eyJ1IjoibW5vcmVsbGkiLCJhIjoiU3BCcTNJQSJ9.4EsgnQLWdR10NXrt7aBYGw';
   mapObj.map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/mapbox/outdoors-v9',
       center: start_loc_mapbox, // starting position
-    zoom: 11 // starting zoom
+    zoom: 17 // starting zoom
   });
 
   // call MapBox map
   mapDraw();  
 
   // listener on Google Street View
-  panorama.addListener('pano_changed', function() {
+  panoObj.panorama.addListener('pano_changed', function() {
     // Move the map pointer to the new pano coords 
-    new_point = switch_coords(panorama.getPosition());  
-    mapObj.point.features[0].geometry.coordinates = new_point;
-
-    // Update the source layer
-    mapObj.map.getSource('point').setData(mapObj.point);
+    new_point = [panoObj.panorama.getPosition().lng(),panoObj.panorama.getPosition().lat()];
+    mapObj.movePoint(new_point);  
   });
 
 }  // end of window.onload
 
+// make maps into objects so access to them won't be limited by scope
+var mapObj = {};
+var panoObj = {};
 
-mapObj = {};
-// starting location in Marin County, MapBox order = lonlat, Google order = latlon
+// starting location in Marin County, MapBox order = lnglat, Google order = latlng
 var start_loc_mapbox = [-122.5554883, 37.8664909];
 // var start_loc_google = {lat:start_loc_mapbox[1], lng:start_loc_mapbox[0]};
-var start_loc_google = switch_coords(start_loc_mapbox);
+var start_loc_google = switch_coords(start_loc_mapbox,"object");
 
-
+// Street View pano
 function initPano() {
-  // Street View pano
-  var panorama = new google.maps.StreetViewPanorama(
+  panoObj.panorama = new google.maps.StreetViewPanorama(
     document.getElementById('pano'), {
-      position: start_loc_google,  
+      // position: start_loc_google,  
+      position: start_loc_google,
       pov: {
         heading: 34,
         pitch: 10
@@ -51,10 +50,10 @@ function initPano() {
 
 // MapBox map
 function mapDraw(){
-  // with geocoder search box
+  // add geocoder search box
   mapObj.map.addControl(new mapboxgl.Geocoder());
 
-  // initial point symbol on map
+  // add initial point symbol on map
   mapObj.point = {"type": "FeatureCollection",
     "features": [{"type": "Feature",
       "geometry": {"type": "Point","coordinates": start_loc_mapbox
@@ -62,7 +61,7 @@ function mapDraw(){
     }]
   };
 
-  // when map loads (prevents "Style is not yet loaded" error)
+  // wait for map load to add point (prevents "Style is not yet loaded" error)
   mapObj.map.on('load', function () {
   // with point at center of default map
     mapObj.map.addSource('point', {
@@ -79,14 +78,60 @@ function mapDraw(){
         }
     });
   });
+
+  mapObj.movePoint = function(coords){
+    // change the point data
+    mapObj.point.features[0].geometry.coordinates = coords;
+    // Update the source layer to reaad in the new point
+    mapObj.map.getSource('point').setData(mapObj.point);
+  }
+
+  // Look for a nearby Street View panorama when the map is clicked.
+  // getPanoramaByLocation will return the nearest pano when the
+  // given radius is 50 meters or less.
+  mapObj.map.on('click', function(event) {
+    // Street View service
+    var sv = new google.maps.StreetViewService();
+    sv.getPanorama({location: switch_coords(event.lngLat,"object"), radius: 50}, processSVData);
+  });
+
+
 }
 
-// coonverts between MapBox coordinate array and Google object
-function switch_coords(coords){
-  if (Array.isArray(coords)) {
-    return {lat:coords[1],lng:coords[0]}  // Google object
+// returns Street View pano
+function processSVData(data, status) {
+  if (status === google.maps.StreetViewStatus.OK) {
+    panoObj.panorama.setPano(data.location.pano);
+    panoObj.panorama.setPov({
+      heading: 270,  // refactor:  point this in the trail direction
+      pitch: 0
+    });
+    panoObj.panorama.setVisible(true);
+    mapObj.movePoint([data.location.latLng.lng(),data.location.latLng.lat()])
   } else {
-    return [coords.lng(),coords.lat()]  // MapBox array
+    console.error('Street View data not found for this location.');
   }
 }
 
+// coonverts between MapBox and Google coordinates
+// if type is not passed in as "array", it will output an object
+// assumes negative values are longitude
+function switch_coords(coords,type){
+  var result = [];  // array to hold initial coords
+  var first_key = '';  // track if the first coord is negative, meaning a longitude (in western hemisphere)
+  if (Array.isArray(coords)) {  // deal with arrays
+    result.push(coords[0]);
+    if (coords[0] < 0) {var first_key = "lng";}  // first coord is negative
+    result.push(coords[1]);
+  } else {                     // deal with objects
+    var first_key = Object.keys(coords)[0]
+    for (key in coords) { 
+      result.push(coords[key])
+    }
+  }
+  if (type == "array") {
+    return [result[1],result[0]]
+  } else {
+    return first_key == 'lng' ? {lat:result[1],lng:result[0]} : {lng:result[1],lat:result[0]}
+  }
+}
