@@ -1,7 +1,10 @@
 window.onload = function(){
 
   // add map
-  mapDraw();  
+  mapObj.mapDraw();
+
+  // mapObj.addPoint();
+  mapObj.getTrail("Kirby Cove Trail");
 
   // listener on Google Street View, needs to be added after the rest of the JS loads since it calls mapObj
   panoObj.panorama.addListener('pano_changed', function() {
@@ -13,8 +16,9 @@ window.onload = function(){
 }  // end of window.onload
 
 // starting location in Marin County, MapBox order = lnglat, Google order = latlng
-var start_loc_mapbox = [-122.5554883, 37.8664909];
+var start_loc_mapbox = [-122.515086,37.841327];
 var start_loc_google = switch_coords(start_loc_mapbox,"object");
+var start_zoom = 12;
 
 // make maps into objects so access to them won't be limited by scope
 var mapObj = {};
@@ -39,21 +43,23 @@ function initPano() {
 }
 
 // MapBox map, geocoder control, point
-function mapDraw(){
+mapObj.mapDraw = function(){
   // make map object
   mapboxgl.accessToken = 'pk.eyJ1IjoibW5vcmVsbGkiLCJhIjoiU3BCcTNJQSJ9.4EsgnQLWdR10NXrt7aBYGw';
-  mapObj.map = new mapboxgl.Map({
+  this.map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/outdoors-v9',
       center: start_loc_mapbox, // starting position
-    zoom: 17 // starting zoom
+    zoom: start_zoom 
   });
 
   // add geocoder search box
-  mapObj.map.addControl(new mapboxgl.Geocoder());
+  this.map.addControl(new mapboxgl.Geocoder());
+}  
 
+mapObj.addPoint = function(){
   // add initial point symbol on map
-  mapObj.point = {"type": "FeatureCollection",
+  this.point = {"type": "FeatureCollection",
     "features": [{"type": "Feature",
       "geometry": {"type": "Point","coordinates": start_loc_mapbox
         }
@@ -61,7 +67,7 @@ function mapDraw(){
   };
 
   // wait for map load to add point (prevents "Style is not yet loaded" error)
-  mapObj.map.on('load', function () {
+  this.map.on('load', function () {
     // with point at center of default map
     mapObj.map.addSource('point', {
         "type": "geojson",
@@ -91,8 +97,53 @@ function mapDraw(){
     var sv = new google.maps.StreetViewService();
     sv.getPanorama({location: switch_coords(event.lngLat,"object"), radius: 50}, processSVData);
   });
+}
 
-}  // end of mapDraw   ********************************************
+mapObj.getTrail = function(name){
+  search_url = 'https://api.outerspatial.com/v0/trails?name='+name
+  $.get(search_url)
+    .done(function(data) {
+      console.log("data:",data)
+      console.log("data.data[0]._links.self:",data.data[0]._links.self)
+      $.get(data.data[0]._links.self)  // json includes a URL to trail details
+        .done(function(trail){
+          mapObj.trail_geom = trail.geometry;
+          mapObj.trail_feature = {
+            "type": "Feature",
+            "properties": {},
+            "geometry": mapObj.trail_geom
+          }
+          mapObj.centerPt = turf.center(mapObj.trail_feature);
+          console.log(mapObj.trail_geom)
+        })
+        .fail(function() {console.log('error getting trail details'); })
+    })
+    .fail(function() {console.log('error getting trail'); });
+}
+
+mapObj.addTrail = function(){
+  // wait for map load to add point (prevents "Style is not yet loaded" error)
+  this.map.on('load', function () {
+    map.addSource("route", {
+      "type": "geojson",
+      "data": mapObj.trail_feature
+    });
+    map.addLayer({
+        "id": "trail",
+        "type": "line",
+        "source": "trail",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#800",
+            "line-width": 6
+        }
+    });
+    map.flyTo({center: mapObj.centerPt});
+  });
+}
 
 // returns Street View pano
 function processSVData(data, status) {
