@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trailname: MyString
+  image: MyString
+  coordinates: MyString
+  trip_id: 
+
+two:
+  trailname: MyString
+  image: MyString
+  coordinates: MyString
+  trip_id: 
