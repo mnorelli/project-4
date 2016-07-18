@@ -24,14 +24,13 @@ TrailLike will provide a beautiful, secure, and well-built full-stack app soluti
  
 ####A logged in user may:
 - perform all the actions above
-- save a trail
-- make a new trip containing multiple, candidate trails
+- save a trail or a set of trails into a trip
+- add a comment to any trip in a trip
 - share the trip via email or link to start their own trail selection process and invite others to join
-- view the trip and any currently selected trails in it
-- see trips on their profile page
+- on user profile page, see a list of trips already authored
+- click any trip to see its trails, comments, votes and users who have been invited to comment
+- invite others to view or comment on an existing trip
 - upvote or downvote a trail in the trip
-- see the trail votes of others
-- add a comment to the trail item
 - mark a the highest voted trail item as final which closes voting
 
 ##Planning and Development
@@ -44,7 +43,7 @@ TrailLike will provide a beautiful, secure, and well-built full-stack app soluti
 </details>
 
 <details><summary>Entity Relationship Diagram (ERD)</summary>
-![ERD](https://ucarecdn.com/de9be9fe-8f46-49cb-88e8-3ca5857b3f1f/TrailLikeERD.jpg)
+![ERD](https://ucarecdn.com/27100d72-4210-41c3-9d93-5e0c973f91f3/TrailLikeERD.jpg)
 </details>
 
 <details><summary>Notes on development</summary>
