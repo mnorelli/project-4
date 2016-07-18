@@ -1,6 +1,6 @@
 {
   "name": "TrailLike",
-  "homepage": "https://github.com/mnorelli/rapid-prototype",
+  "homepage": "https://github.com/mnorelli/traillike",
   "authors": [
     "Michael Norelli <mnorelli360@gmail.com>"
   ],
@@ -15,8 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^1.5.7",
-    "firebase": "^3.1.0",
-    "angularfire": "^2.0.1"
+    "angular": "^1.5.7"
   }
 }
