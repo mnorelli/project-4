@@ -107,7 +107,10 @@ This is a web-hosted application. Please navigate to [link coming soon](http://g
 - more...
 
 
-##Wish List
+##Future Development
+
+<details><summary>Wish List</summary>
+
 - overlay the trail profiles on each other, which would need to...
 - recalculate the trail profiles based on a consistent y-axis among listed trails to enable an "apples-to-apples" comparison
 - use WebGL, Three.js, or A-Frame to provide a 3D-like experience of the trail data
@@ -116,5 +119,7 @@ This is a web-hosted application. Please navigate to [link coming soon](http://g
 - add photos taken with PDF Maps back into the app
 - modals for login, profile
 - use friendly URLs to allow sharing
+-
+</details>
 
 
