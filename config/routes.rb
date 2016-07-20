@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  get 'users/new'
+
+
+  resources :trails
+  resources :trips
+  resources :users
+  # The priority is based upon order of creation: first created -> highest priority.
+  # See how all your routes lay out with "rake routes".
 
   get 'users/create'
 

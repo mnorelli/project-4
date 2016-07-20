@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Trailname:</strong>
+  <%= @trail.trailname %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @trail.image %>
+</p>
+
+<p>
+  <strong>Coordinates:</strong>
+  <%= @trail.coordinates %>
+</p>
+
+<%= link_to 'Edit', edit_trail_path(@trail) %> |
+<%= link_to 'Back', trails_path %>

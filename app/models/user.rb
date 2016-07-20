@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :usertrips
-  has_many :trips, through: :usertrips
+  has_and_belongs_to_many :trips
 
   BCrypt::Engine.cost = 12
 
@@ -9,7 +8,7 @@ class User < ActiveRecord::Base
   # a user must have a password & password confirmation field
   # the fields are match against each other but never persisted to the database
   validates_confirmation_of :password
-  # TODO: add validator for unique emails
+  validates_uniqueness_of :username, :email
 
   def password=(unencrypted_password)
     #raise scope of password to instance
@@ -30,9 +29,10 @@ class User < ActiveRecord::Base
 
   # class method `::confirm`
   def self.confirm(email_param, password_param)
-    # add a unique email validator later
     user = User.find_by_email(email_param)
     user.authenticate(password_param)
   end
 
 end
+
+
