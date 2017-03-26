@@ -36,6 +36,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'awesome_print', require:'ap'
 
 group :development, :test do
+  #  Addresses error: "Sorry, you can't use byebug without Readline"  See https://github.com/guard/guard/wiki/Add-Readline-support-to-Ruby-on-Mac-OS-X
+  gem 'rb-readline'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
 
